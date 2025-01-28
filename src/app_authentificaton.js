@@ -13,6 +13,8 @@ function isAuthorized(req, res, next) {
 }
 
 
+
+
 app.get('/', isAuthorized, (req, res) => res.send('Hello World!'));
 
 app.get('/users', (req, res) => {

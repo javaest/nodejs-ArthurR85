@@ -3,6 +3,10 @@ const session = require('express-session');
 const app = express();
 const path = require('path');
 
+let users= [
+  {username: 'admin' ,password: 'admin'}
+  ]
+
 // Middleware für JSON Parsing (falls du POST-Daten benötigst)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -14,6 +18,34 @@ app.use(session({
   saveUninitialized: true,            // Speichert die Session auch ohne Veränderungen
   cookie: { secure: false }           // Secure setzen, wenn du HTTPS verwendest
 }));
+
+
+
+
+app.get('/signin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'signin.html'));  // Senden der login.html-Seite
+});
+
+app.post('/signin', (req, res) => {
+  if (!req.body.username || typeof req.body.username !== 'string') {
+    return res.status(400).json({ error: 'Name ist erforderlich und muss ein String sein.' });
+  }
+
+  const newUser = {
+    //id: crypto.randomUUID(),
+    username: req.body.username,
+    password: req.body.password
+
+  };
+
+
+
+  users.push(newUser);
+  //res.status(201).json(newUser);
+  return res.redirect('/login');
+});
+
+
 
 // Route für die Login-Seite
 app.get('/login', (req, res) => {
@@ -32,7 +64,15 @@ app.post('/login', (req, res) => {
   const { username, password } = req.body;
 
   // Einfache Benutzerüberprüfung (dies sollte durch sichere Authentifizierung ersetzt werden)
-  if (username === 'admin' && password === 'password123') {
+  if (for (i=0; i<username.length; i++){
+    for (y=0; y<password.length; y++){
+      username === username[i] && password === password[y];
+    }
+  }
+    
+    
+    
+    //username === 'admin' && password === 'password123') {
     req.session.user = username;  // Speichern des Benutzernamens in der Session
     return res.redirect('/content');  // Umleitung zur zweiten Seite nach dem Login
   } else {

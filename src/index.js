@@ -6,7 +6,6 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 
-
 function isAuthorized(req, res, next) {
   const authHeader = req.headers.authorization;
 
@@ -30,7 +29,6 @@ app.get('/users', (req, res) => {
 });
 
 
-
 let users = [
   { id: crypto.randomUUID(), name: 'Alice' },
   { id: crypto.randomUUID(), name: 'Bob' }
@@ -47,9 +45,6 @@ app.get('/', (req, res) => {
 app.get('/api/users', (req, res) => {
   res.json(users);
 });
-
-
-
 
 app.post('/api/users', (req, res) => {
   if (!req.body.name || typeof req.body.name !== 'string') {
