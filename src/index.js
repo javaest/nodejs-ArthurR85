@@ -5,6 +5,32 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 3000;
 
+
+
+function isAuthorized(req, res, next) {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || authHeader !== 'secretpassword') {
+    return res.status(401).send('Unauthorized: Access Denied');
+  }
+
+  next();
+}
+
+
+app.get('/', isAuthorized, (req, res) => res.send('Hello World!'));
+
+app.get('/users', (req, res) => {
+  res.json([
+    {
+      id: 1,
+      name: 'User Userson'
+    },
+  ]);
+});
+
+
+
 let users = [
   { id: crypto.randomUUID(), name: 'Alice' },
   { id: crypto.randomUUID(), name: 'Bob' }
@@ -22,6 +48,9 @@ app.get('/api/users', (req, res) => {
   res.json(users);
 });
 
+
+
+
 app.post('/api/users', (req, res) => {
   if (!req.body.name || typeof req.body.name !== 'string') {
     return res.status(400).json({ error: 'Name ist erforderlich und muss ein String sein.' });
@@ -30,6 +59,7 @@ app.post('/api/users', (req, res) => {
   const newUser = {
     id: crypto.randomUUID(),
     name: req.body.name
+
   };
 
   users.push(newUser);
